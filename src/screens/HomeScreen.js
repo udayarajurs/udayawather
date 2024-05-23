@@ -14,12 +14,28 @@ import axios from 'axios';
 import MyCard from '../components/MyCard';
 import FilterData from '../components/FilterData';
 import {Icon, Avatar} from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Constants} from '../components/Constants';
 
 const HomeScreen = ({navigation}) => {
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedCity, setSelectedCity] = useState('Bangalore');
+
+  const getLocalData = async () => {
+    try {
+      const data = await AsyncStorage.getItem(Constants.LOCALDATA);
+      if (data !== null) {
+        const output = JSON.parse(data);
+        setWeather(output);
+      } else {
+        ToastAndroid.show('something went wrong', ToastAndroid.LONG);
+      }
+    } catch (err) {
+      ToastAndroid.show('something went wrong', ToastAndroid.LONG);
+    }
+  };
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -28,7 +44,16 @@ const HomeScreen = ({navigation}) => {
           `https://pet-choice-backend.vercel.app/api/weather/weatherApi?selectedCity=${selectedCity}`,
         );
         setWeather(response.data);
+        try {
+          AsyncStorage.setItem(
+            Constants.LOCALDATA,
+            JSON.stringify(response.data),
+          );
+        } catch (error) {
+          ToastAndroid.show('something went wrong', ToastAndroid.LONG);
+        }
       } catch (err) {
+        getLocalData();
         setError(err.message);
       }
     };

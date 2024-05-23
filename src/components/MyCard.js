@@ -3,7 +3,7 @@ import React from 'react';
 
 const MyCard = ({navigation, weather}) => {
   return (
-    <View>
+    <View style={{justifyContent: 'center'}}>
       <View style={{alignSelf: 'center', marginVertical: 25}}>
         <Text style={styles.text}>Location: {weather.location.name}</Text>
         <Text style={styles.text}>Temperature: {weather.current.temp_c}°C</Text>
@@ -25,7 +25,7 @@ const MyCard = ({navigation, weather}) => {
             paddingVertical: 10,
             paddingHorizontal: 55,
           }}>
-          See Full Data
+          Show Full Wather
         </Text>
       </TouchableOpacity>
     </View>
@@ -37,5 +37,8 @@ export default MyCard;
 const styles = StyleSheet.create({
   text: {
     color: '#000',
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginVertical: 10,
   },
 });

@@ -1,11 +1,16 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 
 const WeatherDetailScreen = ({route, navigation}) => {
   const {weather} = route.params;
 
+  let iconUrl = weather?.current?.condition?.icon;
+  const imageUrl = iconUrl.startsWith('//') ? `https:${iconUrl}` : iconUrl;
+
   return (
     <View style={styles.container}>
+      <Image source={{uri: imageUrl}} style={styles.icon} />
+
       <Text style={styles.text}>Location: {weather.location.name}</Text>
       <Text style={styles.text}>Region: {weather.location.region}</Text>
       <Text style={styles.text}>Country: {weather.location.country}</Text>
@@ -20,7 +25,7 @@ const WeatherDetailScreen = ({route, navigation}) => {
       </Text>
 
       <TouchableOpacity
-        style={{borderRadius: 15, backgroundColor: '#00A3FF', marginTop: 20}}
+        style={{borderRadius: 15, backgroundColor: '#00A3FF', marginTop: 30}}
         onPress={() => {
           navigation.goBack();
         }}>
@@ -44,10 +49,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
+    backgroundColor: '#fff',
   },
   text: {
     fontSize: 18,
     marginBottom: 8,
+    color: '#000',
+  },
+  icon: {
+    width: 125,
+    height: 125,
   },
 });
 
